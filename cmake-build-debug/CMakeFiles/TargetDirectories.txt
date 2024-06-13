@@ -1,0 +1,3 @@
+C:/Users/USUARIO/OneDrive/Documentos/Ciclo5/Compiladores/Proyecto1/cmake-build-debug/CMakeFiles/Proyecto1.dir
+C:/Users/USUARIO/OneDrive/Documentos/Ciclo5/Compiladores/Proyecto1/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/USUARIO/OneDrive/Documentos/Ciclo5/Compiladores/Proyecto1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
