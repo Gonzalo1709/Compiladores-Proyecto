@@ -84,6 +84,15 @@ void ImpPrinter::visit(WhileStatement* s) {
   return;
 }
 
+void ImpPrinter::visit(DoWhileStatement* s) {
+  cout << "do" << endl;
+  s->body->accept(this);
+  cout << "while (";
+  s->cond->accept(this);
+  cout << ")";
+  return;
+}
+
 
 int ImpPrinter::visit(BinaryExp* e) {
   e->left->accept(this);

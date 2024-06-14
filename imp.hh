@@ -135,6 +135,17 @@ public:
   ~WhileStatement();
 };
 
+class DoWhileStatement : public Stm {
+public:
+  Body *body;
+  Exp* cond;
+  DoWhileStatement(Body* b, Exp* c);
+  void accept(ImpVisitor* v);
+  void accept(ImpValueVisitor* v);
+  void accept(TypeVisitor* v);
+  ~DoWhileStatement();
+};
+
 
 class StatementList {
 public:

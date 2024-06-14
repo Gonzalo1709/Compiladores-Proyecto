@@ -139,6 +139,23 @@ void ImpCodeGen::visit(WhileStatement* s) {
   return;
 }
 
+void ImpCodeGen::visit(DoWhileStatement* s) {
+    string l1 = next_label();
+  string l2 = next_label();
+
+  direcciones.add_level();
+  s->body->var_decs->accept(this);
+  codegen(l1, "skip");
+  s->body->slist->accept(this);
+  s->cond->accept(this);
+  codegen(nolabel, "jmpz", l2);
+  codegen(nolabel, "goto", l1);
+  codegen(l2, "skip");
+    siguiente_direccion -= direcciones.variablesInCurrentLevel();
+    direcciones.remove_level();
+  return;
+}
+
 int ImpCodeGen::visit(BinaryExp* e) {
   e->left->accept(this);
   e->right->accept(this);

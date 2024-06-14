@@ -104,6 +104,15 @@ void ImpInterpreter::visit(WhileStatement* s) {
  return;
 }
 
+void ImpInterpreter::visit(DoWhileStatement* s) {
+  ImpValue v;
+  do {
+    s->body->accept(this);
+    v = s->cond->accept(this);
+  } while (v.bool_value);
+  return;
+}
+
 ImpValue ImpInterpreter::visit(BinaryExp* e) {
   ImpValue result;
   ImpValue v1 = e->left->accept(this);

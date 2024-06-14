@@ -175,3 +175,13 @@ ImpType ImpTypeChecker::visit(CondExp* e) {
     return ttype;
 }
 
+void ImpTypeChecker::visit(DoWhileStatement* s) {
+    ImpType tc = s->cond->accept(this);
+    if (tc != TBOOL) {
+        cout << "Type error in do while statement: Condition has to be boolean." << endl;
+        exit(0);
+    }
+    s->body->accept(this);
+    return;
+}
+
