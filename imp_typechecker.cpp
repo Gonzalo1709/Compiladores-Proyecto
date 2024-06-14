@@ -8,6 +8,7 @@ ImpTypeChecker::ImpTypeChecker() {
 void ImpTypeChecker::typecheck(Program* p) {
   env.clear();
   p->accept(this);
+  cout << "Type checking successful." << endl;
   return;
 }
 
@@ -113,7 +114,7 @@ ImpType ImpTypeChecker::visit(BinaryExp* e) {
       if (t1 == TBOOL && t2 == TBOOL) {
           result = TBOOL;
       } else {
-          cout << "Type error in binary expression" << endl;
+          cout << "Type error in AND / OR binary expression" << endl;
           exit(0);
       }
     break;
@@ -125,17 +126,17 @@ ImpType ImpTypeChecker::visit(BinaryExp* e) {
       if (t1 == TINT && t2 == TINT) {
           result = TINT;
       } else {
-          cout << "Type error in binary expression" << endl;
+          cout << "Type error in arithmetic binary expression" << endl;
           exit(0);
       }
     break;
   case LT:
   case LTEQ:
   case EQ:
-      if (t1 == TBOOL && t2 == TBOOL) {
+      if (t1 == TINT && t2 == TINT) {
           result = TBOOL;
       } else {
-          cout << "Type error in binary expression" << endl;
+          cout << "Type error in comparison binary expression" << endl;
           exit(0);
       }
     break;
