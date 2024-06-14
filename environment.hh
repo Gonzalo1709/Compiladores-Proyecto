@@ -77,6 +77,10 @@ public:
     v = ribs[idx][x];
     return true;
   }
+  // Esta función nos va a ayudar a liberar memoria de las variables declaradas en un scope para el SVML.
+  int variablesInCurrentLevel() {
+    return ribs.back().size();
+  }
 
 };
 
