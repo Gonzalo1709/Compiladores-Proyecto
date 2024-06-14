@@ -130,6 +130,8 @@ ImpValue ImpInterpreter::visit(BinaryExp* e) {
   case LT: bv = (iv1 < iv2) ? 1 : 0; type = TBOOL; break;
   case LTEQ: bv = (iv1 <= iv2) ? 1: 0; type = TBOOL; break;
   case EQ: bv = (iv1 == iv2) ? 1 : 0; type = TBOOL; break;
+    case AND: bv = (v1.bool_value && v2.bool_value) ? 1 : 0; type = TBOOL; break;
+    case OR: bv = (v1.bool_value || v2.bool_value) ? 1 : 0; type = TBOOL; break;
   }
   if (type == TINT) result.int_value = iv;
   else result.bool_value = bv;

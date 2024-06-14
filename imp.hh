@@ -16,7 +16,7 @@ class ImpVisitor;
 class ImpValueVisitor;
 class TypeVisitor;
 
-enum BinaryOp { PLUS, MINUS, MULT, DIV, EXP, LT, LTEQ, EQ};
+enum BinaryOp { PLUS, MINUS, MULT, DIV, EXP, LT, LTEQ, EQ, AND, OR};
 
   
 class Exp {
