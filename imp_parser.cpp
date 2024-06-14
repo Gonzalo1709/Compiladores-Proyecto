@@ -46,6 +46,14 @@ Token* Scanner::nextToken() {
   // consume whitespaces
   c = nextChar();
   while (c == ' ' || c == '\t'  || c == '\n') c = nextChar();
+  if (c == '/') {
+    c = nextChar();
+    if (c == '/') {
+      while (c != '\n') c = nextChar();
+      return nextToken();
+    }
+    rollBack();
+  }
   if (c == '\0') return new Token(Token::END);
   startLexema();
   if (isdigit(c)) {
