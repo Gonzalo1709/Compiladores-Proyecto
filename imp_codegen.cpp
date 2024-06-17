@@ -117,7 +117,6 @@ void ImpCodeGen::visit(WhileStatement* s) {
   string l1 = next_label();
   string l2 = next_label();
 
-  direcciones.add_level(); // Se añade para que las variables declaradas dentro del while no sean accesibles fuera
   codegen(l1, "skip");
   s->cond->accept(this);
   codegen(nolabel, "jmpz", l2);
@@ -131,7 +130,6 @@ void ImpCodeGen::visit(WhileStatement* s) {
 void ImpCodeGen::visit(DoWhileStatement* s) {
     string l1 = next_label();
 
-  direcciones.add_level();
   codegen(l1, "skip");
   s->body->accept(this);
   s->cond->accept(this);
