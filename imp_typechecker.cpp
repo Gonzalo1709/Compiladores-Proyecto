@@ -14,6 +14,7 @@ void ImpTypeChecker::typecheck(Program* p) {
 
 void ImpTypeChecker::visit(Program* p) {
   p->body->accept(this);
+  cout << "Variables to allocate: " << variablesToAllocate << endl;
   return;
 }
 
@@ -47,6 +48,7 @@ void ImpTypeChecker::visit(VarDec* vd) {
     }
   list<string>::iterator it;
   for (it = vd->vars.begin(); it != vd->vars.end(); ++it) {
+      variablesToAllocate++;
      env.add_var(*it, type);
   }
   return;
@@ -89,8 +91,22 @@ void ImpTypeChecker::visit(IfStatement* s) {
     }
 
   s->tbody->accept(this);
-  if (s->fbody != NULL)
-    s->fbody->accept(this);
+    // Contamos las variables declaradas en el tbody
+    int variablesInTbody = 0;
+    int variablesInFbody = 0;
+    for (auto it = s->tbody->var_decs->vdlist.begin(); it != s->tbody->var_decs->vdlist.end(); ++it) {
+        variablesInTbody += (*it)->vars.size();
+    }
+  if (s->fbody != NULL) {
+      s->fbody->accept(this);
+      // Contamos las variables declaradas en el fbody
+      for (auto it = s->fbody->var_decs->vdlist.begin(); it != s->fbody->var_decs->vdlist.end(); ++it) {
+          variablesInFbody += (*it)->vars.size();
+      }
+  }
+  // Tenemos que restar la menor cantidad de variables declaradas en los dos cuerpos
+    variablesToAllocate -= min(variablesInTbody, variablesInFbody);
+  // Esto se hace para no hacer alloc innecesario, solo haciendo alloc a la cantidad máxima que se podría usar
   return;
 }
 

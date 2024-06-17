@@ -13,8 +13,9 @@
 #include "environment.hh"
 
 class ImpCodeGen : public ImpVisitor {
+    int variablesToAllocate = 0;
 public:
-  void codegen(Program*, string outfname);
+  void codegen(Program*, string outfname, int variablesToAllocateIn = 0);
   void visit(Program*);
   void visit(Body*);
   void visit(VarDecList*);

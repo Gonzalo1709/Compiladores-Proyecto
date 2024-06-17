@@ -43,7 +43,7 @@ int main(int argc, const char* argv[]) {
   string outfname = argv[1];
   outfname += ".sm";
   cout << endl << "Compiling to: " << outfname << endl;
-  cg.codegen(program, outfname);
+  cg.codegen(program, outfname, checker.variablesToAllocate);
 
   delete program;
 

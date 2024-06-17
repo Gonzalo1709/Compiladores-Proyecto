@@ -25,10 +25,11 @@ string ImpCodeGen::next_label() {
   return l;
 }
 
-void ImpCodeGen::codegen(Program* p, string outfname) {
+void ImpCodeGen::codegen(Program* p, string outfname, int variablesToAllocateIn) {
   nolabel = "";
   current_label = 0;
   siguiente_direccion = 0;
+  variablesToAllocate = variablesToAllocateIn;
   p->accept(this);
   ofstream outfile;
   outfile.open(outfname);
@@ -39,9 +40,7 @@ void ImpCodeGen::codegen(Program* p, string outfname) {
 }
 
 void ImpCodeGen::visit(Program* p) {
-    // Movimos el alloc al vardeclist para que se haga cada vez que se declaran variables
-    // Esto evita que se hagan allocs a variables que no son usadas
-    // Por ejemplo en scopes a los que no se entran en if - else
+    codegen(nolabel, "alloc", variablesToAllocate); // Se reserva espacio para las variables
   p->body->accept(this);
   codegen(nolabel, "halt");
   return;
@@ -59,13 +58,8 @@ void ImpCodeGen::visit(Body * b) {
 
 void ImpCodeGen::visit(VarDecList* s) {
   list<VarDec*>::iterator it;
-  int mem = 0;
   for (it = s->vdlist.begin(); it != s->vdlist.end(); ++it) {
       (*it)->accept(this);
-      mem += (*it)->vars.size();
-  }
-  if (mem > 0) {
-    codegen(nolabel, "alloc", mem);
   }
   return;
 }
@@ -124,18 +118,13 @@ void ImpCodeGen::visit(WhileStatement* s) {
   string l2 = next_label();
 
   direcciones.add_level(); // Se añade para que las variables declaradas dentro del while no sean accesibles fuera
-  s->body->var_decs->accept(this); // Se acepta antes de la ejecución del while para que se haga el alloc
   codegen(l1, "skip");
   s->cond->accept(this);
   codegen(nolabel, "jmpz", l2);
 
-  s->body->slist->accept(this); // Solo el slist porque el vdlist se tiene que aceptar antes para el alloc
+  s->body->accept(this);
   codegen(nolabel, "goto", l1);
   codegen(l2, "skip");
-    // Tenemos que liberar los espacios en memoria de las variables declaradas dentro del while
-    // Esto lo podemos hacer contando la cantidad de variables declaradas en el while y liberando esa cantidad de espacios
-    siguiente_direccion -= direcciones.variablesInCurrentLevel();
-    direcciones.remove_level();
   return;
 }
 
@@ -143,13 +132,10 @@ void ImpCodeGen::visit(DoWhileStatement* s) {
     string l1 = next_label();
 
   direcciones.add_level();
-  s->body->var_decs->accept(this);
   codegen(l1, "skip");
-  s->body->slist->accept(this);
+  s->body->accept(this);
   s->cond->accept(this);
   codegen(nolabel, "jmpn", l1);
-    siguiente_direccion -= direcciones.variablesInCurrentLevel();
-    direcciones.remove_level();
   return;
 }
 

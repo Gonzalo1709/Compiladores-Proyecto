@@ -12,6 +12,8 @@ using namespace std;
 class ImpTypeChecker : public TypeVisitor {
 public:
   ImpTypeChecker();
+  int variablesToAllocate = 0;
+
 private:
   Environment<ImpType> env;
 
